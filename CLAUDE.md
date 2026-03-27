@@ -104,3 +104,46 @@ LitVar2 bulk FTP: `https://ftp.ncbi.nlm.nih.gov/pub/lu/LitVar/litvar2_variants.j
 text2gene.org registered via Gandi (API key in nthmost-systems/.secrets/gandi-apikey).
 HTTPS pending — run `~/get-cert.sh` on loki once DNS propagates (check: `dig text2gene.org @8.8.8.8`).
 Auto-renew is enabled on Gandi.
+
+## Task Status Reporting
+
+When working on long-running or multi-step tasks in this project, write status
+breadcrumbs to `~/.claude-monitor/` for the claude-monitor tool.
+
+**Status file:** `~/.claude-monitor/text2gene2.json`
+For parallel tasks use `text2gene2_<task>.json` (e.g. `text2gene2_benchmark.json`).
+
+### When to create status files
+- Multi-step tasks (3+ steps)
+- Long-running operations (>30 seconds) — benchmark runs, bulk API calls, deploys
+- Tasks that may need user intervention
+- Any time sub-agents are spawned in parallel
+
+### Use the Write tool directly (not Bash)
+
+```python
+import json
+from datetime import datetime, timezone
+
+Write(
+    file_path="/Users/nthmost/.claude-monitor/text2gene2.json",
+    content=json.dumps({
+        "task_name": "Running HHT benchmark",
+        "status": "in_progress",       # pending|in_progress|blocked|waiting|completed|error
+        "progress_percent": 45,
+        "current_step": "Querying 712/1586 variants",
+        "message": "t2g2 concurrent queries, LitVar2 from bulk FTP",
+        "needs_attention": False,
+        "tiny_title": "HHT bench",     # shown alone in tiny display mode
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }, indent=2)
+)
+```
+
+### Good task names for this project
+- `"LVG expansion"` — VariantValidator calls
+- `"Running benchmark"` — any benchmarks/build_*.py run
+- `"Deploying to loki"` — rsync + systemctl restart
+- `"Fetching ClinVar data"` — FTP downloads
+- `"Querying sources"` — pipeline fan-out for a variant set
+- `"DNS / cert setup"` — Gandi API or certbot operations
