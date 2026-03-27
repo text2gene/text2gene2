@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}{{ hgvs }} — text2gene{% endblock %}
+
+{% block content %}
+<form action="/search" method="get">
+  <div class="search-box" style="margin-top:1.5rem;">
+    <input type="text" name="hgvs" value="{{ hgvs }}" autofocus>
+    <button type="submit">Search</button>
+  </div>
+</form>
+
+{% if error %}
+<div class="error-box">
+  <strong>Error:</strong> {{ error }}
+</div>
+{% endif %}
+
+{% if result %}
+  {# ── LVG summary ──────────────────────────────────────────────────── #}
+  {% if result.lvg %}
+  <div class="card lvg-section" style="margin-top:1rem;">
+    <strong>Variant expansion</strong>
+    {% if result.lvg.gene_symbol %}
+      &mdash; <strong>{{ result.lvg.gene_symbol }}</strong>
+    {% endif %}
+    {% if result.lvg.rsids %}
+      &mdash; {{ result.lvg.rsids | join(", ") }}
+    {% endif %}
+    <div style="margin-top:0.5rem; display:flex; flex-wrap:wrap; gap:0.4rem;">
+      {% for h in result.lvg.all_hgvs %}
+        <code>{{ h }}</code>
+      {% endfor %}
+    </div>
+    {% if result.lvg.warnings %}
+    <div style="margin-top:0.5rem; color:#dc6815;">
+      {% for w in result.lvg.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# ── Source summary ───────────────────────────────────────────────── #}
+  <div style="display:flex; gap:0.75rem; margin:1rem 0; flex-wrap:wrap;">
+    {% for source, pmids in result.by_source.items() %}
+    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:120px; text-align:center;">
+      <div class="tag tag-{{ source }}">{{ source }}</div>
+      <div style="font-size:1.5rem; font-weight:700; margin-top:0.25rem;">{{ pmids | length }}</div>
+      <div style="font-size:0.75rem; color:#6c757d;">PMIDs</div>
+    </div>
+    {% endfor %}
+    {% if result.errors %}
+    {% for source, err in result.errors.items() %}
+    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:120px; border-color:#fca5a5;">
+      <div class="tag" style="background:#fee2e2;color:#b91c1c;">{{ source }}</div>
+      <div style="font-size:0.75rem; color:#b91c1c; margin-top:0.25rem;">{{ err }}</div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+  {# ── Results table ────────────────────────────────────────────────── #}
+  {% if result.citations %}
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table class="results">
+      <thead>
+        <tr>
+          <th style="width:3rem;">Conf</th>
+          <th>PMID</th>
+          <th>Sources</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for citation in result.citations %}
+        <tr>
+          <td>
+            {% for i in range(4) %}
+            <span class="confidence-bar {% if i < citation.confidence %}filled{% endif %}"></span>
+            {% endfor %}
+          </td>
+          <td>
+            <a class="pmid-link"
+               href="https://pubmed.ncbi.nlm.nih.gov/{{ citation.pmid }}/"
+               target="_blank" rel="noopener">
+              {{ citation.pmid }}
+            </a>
+          </td>
+          <td>
+            {% for src in citation.sources %}
+            <span class="source-badge tag-{{ src }}">{{ src }}</span>
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:0.8rem; color:#6c757d; margin-top:0.5rem; text-align:right;">
+    {{ result.citations | length }} unique PMIDs
+  </p>
+  {% else %}
+  <div class="card" style="text-align:center; color:#6c757d; padding:2rem;">
+    No literature found for this variant across any source.
+  </div>
+  {% endif %}
+
+{% elif not error %}
+{# Empty state — form submitted but no query yet (shouldn't normally happen) #}
+<div class="card" style="text-align:center; color:#6c757d; padding:2rem;">
+  Enter an HGVS variant above to search.
+</div>
+{% endif %}
+
+{% endblock %}

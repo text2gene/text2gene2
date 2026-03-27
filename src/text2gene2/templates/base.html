@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}text2gene{% endblock %}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #212529;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a3a5c;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    header h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    header h1 span { color: #64b5f6; }
+    header nav a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 1.5rem;
+    }
+    header nav a:hover { color: white; }
+
+    main { max-width: 960px; margin: 2rem auto; padding: 0 1.5rem; }
+
+    .search-box {
+      display: flex;
+      gap: 0.5rem;
+      margin: 2rem 0;
+    }
+    .search-box input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid #dee2e6;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+    .search-box input:focus { outline: none; border-color: #1a3a5c; }
+    .search-box button {
+      padding: 0.75rem 1.5rem;
+      background: #1a3a5c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .search-box button:hover { background: #245080; }
+
+    .card {
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 0.25rem;
+    }
+    .tag-litvar2  { background: #e3f2fd; color: #1565c0; }
+    .tag-clinvar  { background: #e8f5e9; color: #2e7d32; }
+    .tag-google   { background: #fff3e0; color: #e65100; }
+    .tag-europepmc { background: #f3e5f5; color: #6a1b9a; }
+
+    .source-badge {
+      display: inline-block;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-right: 0.2rem;
+    }
+
+    .pmid-link { color: #1a3a5c; text-decoration: none; font-weight: 600; }
+    .pmid-link:hover { text-decoration: underline; }
+
+    .confidence-bar {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 2px;
+      background: #dee2e6;
+    }
+    .confidence-bar.filled { background: #1a3a5c; }
+
+    .error-box {
+      background: #fff5f5;
+      border: 1px solid #fca5a5;
+      border-radius: 6px;
+      padding: 1rem;
+      color: #b91c1c;
+      margin: 1rem 0;
+    }
+
+    .lvg-section { font-size: 0.85rem; color: #6c757d; }
+    .lvg-section code { font-size: 0.8rem; background: #f1f3f5; padding: 0.1rem 0.3rem; border-radius: 3px; }
+
+    table.results { width: 100%; border-collapse: collapse; }
+    table.results th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      background: #f1f3f5;
+      font-size: 0.85rem;
+      border-bottom: 2px solid #dee2e6;
+    }
+    table.results td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #f1f3f5;
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
+    table.results tr:hover td { background: #f8f9fa; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #6c757d;
+      font-size: 0.8rem;
+      margin-top: 3rem;
+    }
+    footer a { color: #1a3a5c; }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header>
+    <h1><a href="/" style="color:white;text-decoration:none">text<span>2</span>gene</a></h1>
+    <nav>
+      <a href="/">Search</a>
+      <a href="/api/docs">API</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    text2gene2 &mdash; variant literature discovery &mdash;
+    <a href="https://github.com/nthmost/text2gene2">GitHub</a>
+  </footer>
+</body>
+</html>

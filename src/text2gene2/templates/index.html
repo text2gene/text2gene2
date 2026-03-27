@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}text2gene — variant literature search{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding: 3rem 0 2rem;">
+  <h2 style="font-size:1.75rem; color:#1a3a5c; margin-bottom:0.5rem;">
+    Find every paper about your variant
+  </h2>
+  <p style="color:#6c757d; max-width:560px; margin:0 auto 2rem;">
+    Enter an HGVS-formatted genetic variant. text2gene searches LitVar2, ClinVar,
+    Europe PMC, and Google Scholar simultaneously — including literature not yet
+    curated in any database.
+  </p>
+
+  <form action="/search" method="get" style="max-width:640px; margin:0 auto;">
+    <div class="search-box">
+      <input type="text" name="hgvs"
+             placeholder="e.g. NM_007294.3:c.4964delA  or  NM_004448.2:c.2326_2327insTCT"
+             autofocus>
+      <button type="submit">Search</button>
+    </div>
+  </form>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">
+  <div class="card">
+    <h3 style="margin-bottom:0.5rem; font-size:1rem;">Multi-transcript search</h3>
+    <p style="font-size:0.875rem; color:#6c757d;">
+      Expands your variant across all transcript versions via VariantValidator —
+      surfacing literature that used older or alternate notations.
+    </p>
+  </div>
+  <div class="card">
+    <h3 style="margin-bottom:0.5rem; font-size:1rem;">Four sources, one query</h3>
+    <p style="font-size:0.875rem; color:#6c757d;">
+      LitVar2, ClinVar, Europe PMC, and Google all searched in parallel.
+      PMIDs found by multiple sources are ranked highest.
+    </p>
+  </div>
+</div>
+
+<p style="text-align:center; margin-top:2rem; font-size:0.8rem; color:#adb5bd;">
+  Accepts HGVS transcript (NM_...), genomic (NC_...), or protein (NP_...) notation.
+</p>
+{% endblock %}

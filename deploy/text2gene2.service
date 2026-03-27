@@ -1,0 +1,33 @@
+[Unit]
+Description=text2gene2 web service
+After=network.target redis.service
+Wants=redis.service
+
+[Service]
+Type=exec
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/text2gene2
+
+# Load secrets from .env
+EnvironmentFile=/opt/text2gene2/.env
+
+ExecStart=/opt/text2gene2/venv/bin/uvicorn \
+    text2gene2.api.app:app \
+    --host 127.0.0.1 \
+    --port 8000 \
+    --workers 4 \
+    --proxy-headers \
+    --forwarded-allow-ips '*'
+
+Restart=always
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/text2gene2
+
+[Install]
+WantedBy=multi-user.target
