@@ -1,0 +1,151 @@
+hgvs	gene	disease	n_citations	rsid	allele_id	variation_id	review_status
+NM_000350.3:c.4667+1G>C	ABCA4	Retinal dystrophy	1		3408636	3249831	no assertion criteria provided
+NM_001171.6:c.951C>A	ABCC6	Autosomal recessive inherited pseudoxanthoma elasticum	2	78678589	427049	433366	criteria provided, multiple submitters, no conflicts
+NM_000789.4:c.2306-1G>C	ACE	Renal tubular dysgenesis of genetic origin;Hemorrhage, intracerebral, susceptibility to;Microvascular complications of diabetes, susceptibility to, 3	1		3705511	3582526	criteria provided, single submitter
+NM_001130004.2:c.982G>A	ACTN1	Platelet-type bleeding disorder 15	3	1594771236	654109	666542	criteria provided, conflicting classifications
+NM_000030.3:c.1102G>A	AGXT	Primary hyperoxaluria, type I	2	180177163	200602	204148	no assertion criteria provided
+NM_024740.2:c.131+1G>C	ALG9	ALG9 congenital disorder of glycosylation	3	1964237631	2176691	2120195	criteria provided, single submitter
+NM_000478.6:c.1327G>A	ALPL	Hypophosphatasia	3	2545350189	3184360	3024105	criteria provided, multiple submitters, no conflicts
+NM_000481.4:c.63del	AMT	Glycine encephalopathy	1	386833688	70876	56237	no assertion criteria provided
+NM_000037.4:c.2T>C	ANK1	Hereditary spherocytosis type 1	1		4191134	4077956	criteria provided, conflicting classifications
+NM_000038.6:c.824_825delinsA	APC	Hereditary cancer-predisposing syndrome	1	2532756727	2751615	2584047	criteria provided, multiple submitters, no conflicts
+NM_001195248.2:c.596del	APTX	Ataxia, early-onset, with oculomotor apraxia and hypoalbuminemia	2	770007531	1313655	1323370	criteria provided, multiple submitters, no conflicts
+NM_001374828.1:c.2572C>T	ARID1B	not provided	1	1554298232	443922	450773	criteria provided, multiple submitters, no conflicts
+NM_000051.4:c.7370_7371del	ATM	Hereditary cancer-predisposing syndrome	3	1591160284	810630	826996	criteria provided, multiple submitters, no conflicts
+NM_000053.4:c.987_988dup	ATP7B	Wilson disease	3	2547816289	2913014	2750976	criteria provided, single submitter
+NM_000489.6:c.7096G>T	ATRX	Acquired hemoglobin H disease;Alpha thalassemia-X-linked intellectual disability syndrome;Intellectual disability-hypotonic facies syndrome, X-linked, 1	1		3729909	3598429	criteria provided, single submitter
+NM_000465.4:c.1385G>A	BARD1	Hereditary cancer-predisposing syndrome	3	1213894295	472546	479137	criteria provided, multiple submitters, no conflicts
+NM_007294.4:c.3152del	BRCA1	Hereditary breast ovarian cancer syndrome	2		4823329	4719145	criteria provided, single submitter
+NM_000059.4:c.9254_9256+11del	BRCA2	Hereditary breast ovarian cancer syndrome	3	1555288584	463599	462518	criteria provided, multiple submitters, no conflicts
+NM_001127222.2:c.1850T>C	CACNA1A	Developmental and epileptic encephalopathy, 52;Episodic ataxia type 2;Migraine, familial hemiplegic, 1;Spinocerebellar ataxia type 6	1	2145004155	1671450	1679530	criteria provided, single submitter
+NM_000070.3:c.257C>T	CAPN3	Autosomal recessive limb-girdle muscular dystrophy type 2A	3	121434546	32655	17616	criteria provided, single submitter
+NM_000071.3:c.1603_1604del	CBS	Classic homocystinuria	2	1555869934	549261	551171	no assertion criteria provided
+NM_001271049.2:c.1466_1469del	CFAP221	Young syndrome	1		4025931	3911906	no assertion criteria provided
+NM_000492.4:c.3963+1G>A	CFTR	Cystic fibrosis	1	672601314	171726	161996	criteria provided, single submitter
+NM_001271.4:c.3638_3644delinsAAAATGCACAGAAATGTCATCAAGAGGTTAANNNNNNNNNNATGCATTTCCCCAGTAGATGGGTCCTTGTACACCAAGACTTTTTGTTCGTCTTTGTACCAGAGTTTAGCCAAAG	CHD2	Developmental and epileptic encephalopathy 94	1	2141867280	1063483	1071922	criteria provided, single submitter
+NM_004370.6:c.4177del	COL12A1	Bethlem myopathy 2;Ullrich congenital muscular dystrophy 2	3	1767314344	832404	861370	criteria provided, single submitter
+NM_000088.4:c.3091G>A	COL1A1	Osteogenesis imperfecta type III	2		4188048	4075330	criteria provided, single submitter
+NM_000092.5:c.3452G>C	COL4A4	not provided	3	371803356	1515437	1517277	criteria provided, conflicting classifications
+NM_020247.5:c.815G>A	COQ8A	Autosomal recessive ataxia due to ubiquinone deficiency	3	119468006	18678	3639	no assertion criteria provided
+NM_001876.4:c.1216C>T	CPT1A	Carnitine palmitoyl transferase 1A deficiency	2	1594334937	640395	645430	criteria provided, single submitter
+NM_004380.3:c.5856dup	CREBBP	Rubinstein-Taybi syndrome	3	1596786167	644677	644368	criteria provided, single submitter
+NM_177559.3:c.529G>A	CSNK2A1	Inborn genetic diseases	1	1555762734	512458	522077	criteria provided, multiple submitters, no conflicts
+NM_018122.5:c.228-15C>G	DARS2	Leukoencephalopathy with brain stem and spinal cord involvement-high lactate syndrome	1		3892951	3776806	criteria provided, single submitter
+NM_001356.5:c.3G>T	DDX3X	Intellectual disability, X-linked 102	1	1555950665	3227152	3067176	criteria provided, single submitter
+NM_177438.3:c.2863dup	DICER1	DICER1-related tumor predisposition	2	1891405883	921368	933066	criteria provided, single submitter
+NM_203447.4:c.1174C>T	DOCK8	Severe combined immunodeficiency disease	3	372598000	1688459	1696050	criteria provided, multiple submitters, no conflicts
+NM_004415.4:c.955_957del	DSP	Cardiomyopathy, dilated, with wooly hair, keratoderma, and tooth agenesis	1		3703396	3544418	criteria provided, single submitter
+NM_001377.3:c.6099_6102dup	DYNC2H1	Jeune thoracic dystrophy	3	2496236257	2947140	2779944	criteria provided, single submitter
+NM_001347721.2:c.1000_1001del	DYRK1A	DYRK1A-related intellectual disability syndrome	1	2148619635	1310469	1320224	criteria provided, single submitter
+NM_053013.4:c.1070G>A	ENO3	Glycogen storage disease due to muscle beta-enolase deficiency	1	2151144481	1275473	1285634	no assertion criteria provided
+NM_014297.5:c.542dup	ETHE1	Ethylmalonic encephalopathy	1	2513605883	2837410	2675147	criteria provided, single submitter
+NM_024306.5:c.707T>C	FA2H	Hereditary spastic paraplegia 35	1	387907172	40302	31624	no assertion criteria provided
+NM_000135.4:c.182_184delinsGG	FANCA	Fanconi anemia complementation group A	1	2544389395	2837683	2675422	criteria provided, multiple submitters, no conflicts
+NM_004629.2:c.560del	FANCG	Fanconi anemia	2	2131057213	1364280	1452560	criteria provided, single submitter
+NM_000138.5:c.6695G>C	FBN1	not provided	2	1060501054	1152648	1163968	criteria provided, multiple submitters, no conflicts
+NM_021871.4:c.922C>T	FGA	Hypofibrinogenemia	2	776817952	615381	627406	criteria provided, multiple submitters, no conflicts
+NM_023110.3:c.1755C>A	FGFR1	Hypogonadotropic hypogonadism 2 with or without anosmia	1	2150586919	2670359	2505396	criteria provided, single submitter
+NM_000143.4:c.700A>C	FH	not provided	2	372505976	447693	460376	criteria provided, multiple submitters, no conflicts
+NM_014845.6:c.783del	FIG4	Charcot-Marie-Tooth disease type 4	2	1161553940	1060559	1075927	criteria provided, single submitter
+NM_001079802.2:c.1129_1130del	FKTN	Muscular dystrophy-dystroglycanopathy (congenital with brain and eye anomalies), type A, 4	3	1554761402	545055	557908	criteria provided, multiple submitters, no conflicts
+NM_001110556.2:c.4904_4912del	FLNA	Otopalatodigital syndrome spectrum disorder	1	863223298	26801	11762	no assertion criteria provided
+NM_001458.5:c.4288+1G>A	FLNC	not provided;Distal myopathy with posterior leg and anterior hand involvement;Hypertrophic cardiomyopathy 26;Myofibrillar myopathy 5	3	2128937065	1456236	1348848	criteria provided, single submitter
+NM_005249.5:c.1359_1360del	FOXG1	FOXG1 disorder	1	2502228019	2912633	2749292	criteria provided, single submitter
+NM_001349338.3:c.825del	FOXP1	Intellectual disability-severe speech delay-mild dysmorphism syndrome	1	2106870085	1671271	1679348	criteria provided, single submitter
+NM_000512.5:c.1021A>C	GALNS	Mucopolysaccharidosis, MPS-IV-A	1	2543477717	2414762	2440401	criteria provided, single submitter
+NM_000557.5:c.1118T>G	GDF5	Symphalangism, proximal, 1B	1	121909349	23431	8392	no assertion criteria provided
+NM_000166.6:c.208C>G	GJB1	Charcot-Marie-Tooth Neuropathy X	3	878853697	243822	237122	criteria provided, conflicting classifications
+NM_024009.3:c.101T>C	GJB3	Erythrokeratodermia variabilis et progressiva 1	2	28937583	21530	6491	criteria provided, single submitter
+NM_000404.4:c.1771T>C	GLB1	Mucopolysaccharidosis, MPS-IV-B;GM1 gangliosidosis	3	72555373	1892048	2151971	criteria provided, single submitter
+NM_000168.6:c.4020del	GLI3	Greig cephalopolysyndactyly syndrome;Pallister-Hall syndrome	2	2484367143	3100816	2942350	criteria provided, single submitter
+NM_001134407.3:c.2084G>A	GRIN2A	Neurodevelopmental disorder	2	1555491654	203359	205689	criteria provided, multiple submitters, no conflicts
+NM_000834.5:c.2470A>G	GRIN2B	Developmental and epileptic encephalopathy, 27	1	2497476034	2741512	2576616	criteria provided, single submitter
+NM_000521.4:c.771+5G>C	HEXB	not provided	1	727503959	177768	167174	criteria provided, conflicting classifications
+NM_000187.4:c.650-17G>A	HGD	Alkaptonuria	1	1309894047	2752267	2584704	no assertion criteria provided
+NM_152419.3:c.995A>G	HGSNAT	Mucopolysaccharidosis, MPS-III-C;Retinitis pigmentosa 73	2	374892647	1404826	1367104	criteria provided, conflicting classifications
+NM_014362.4:c.386-1G>C	HIBCH	3-hydroxyisobutyryl-CoA hydrolase deficiency	1	1203170244	1324744	1333974	criteria provided, multiple submitters, no conflicts
+NM_138413.4:c.3G>A	HOGA1	Primary hyperoxaluria type 3	2	2135711169	2831834	2664379	criteria provided, single submitter
+NM_001374675.1:c.117_123+3del	HSF4	Cataract 5 multiple types	3		3858521	3727898	criteria provided, single submitter
+NM_001270974.2:c.3648del	HYDIN	Primary ciliary dyskinesia 5	1		4392546	4280003	criteria provided, single submitter
+NM_000202.8:c.358C>T	IDS	Mucopolysaccharidosis, MPS-II	1		3729597	3598110	criteria provided, conflicting classifications
+NM_022168.4:c.716dup	IFIH1	Aicardi-Goutieres syndrome 7	1	1558875029	578391	587596	criteria provided, conflicting classifications
+NM_001111125.3:c.684C>T	IQSEC2	not provided	2	781940286	190332	193167	criteria provided, conflicting classifications
+NM_000214.3:c.3039dup	JAG1	Alagille syndrome due to a JAG1 point mutation	2	2122595645	1364035	1452314	criteria provided, multiple submitters, no conflicts
+NM_172107.4:c.803T>C	KCNQ2	Developmental and epileptic encephalopathy, 7	1	864321708	217260	219236	no assertion criteria provided
+NM_170606.3:c.307C>T	KMT2C	Neoplasm	3		3395617	3236497	criteria provided, single submitter
+NM_144508.5:c.1076del	KNL1	Microcephaly 4, primary, autosomal recessive	1	2141719739	1682645	1690305	criteria provided, single submitter
+NM_001278116.2:c.2848_2849del	L1CAM	X-linked hydrocephalus syndrome;MASA syndrome	1	2520972097	3222491	3062265	criteria provided, single submitter
+NM_000527.5:c.675_681dup	LDLR	Hypercholesterolemia, familial, 1	2	1555803426	245719	251380	criteria provided, multiple submitters, no conflicts
+NM_001127671.2:c.1865C>T	LIFR	not provided	3	747837301	1934931	2203641	criteria provided, multiple submitters, no conflicts
+NM_002335.4:c.2371A>G	LRP5	Osteoporosis with pseudoglioma	1	1229615060	2747154	2579717	criteria provided, single submitter
+NM_133259.4:c.3710-1del	LRPPRC	Congenital lactic acidosis, Saguenay-Lac-Saint-Jean type	1		3713382	3586587	criteria provided, single submitter
+NM_001130144.3:c.2248G>T	LTBP3	Brachyolmia-amelogenesis imperfecta syndrome	1	1554973844	514286	523638	no assertion criteria provided
+NM_000081.4:c.9620_9621dup	LYST	Chédiak-Higashi syndrome	1	2527417689	2834796	2676376	criteria provided, single submitter
+NM_022132.5:c.685G>T	MCCC2	3-methylcrotonyl-CoA carboxylase 2 deficiency	1		3718534	3592749	criteria provided, single submitter
+NM_000249.4:c.493del	MLH1	not provided	2	1553642707	536272	545742	criteria provided, multiple submitters, no conflicts
+NM_000251.3:c.1707del	MSH2	Hereditary cancer-predisposing syndrome	3	2528831048	1834450	1778478	criteria provided, multiple submitters, no conflicts
+NM_000179.3:c.2544_2548del	MSH6	Lynch syndrome	1		3546200	3387065	criteria provided, single submitter
+NM_002454.3:c.1355_1361dup	MTRR	Methylcobalamin deficiency type cblE	2	2479073064	2178209	2126896	criteria provided, single submitter
+NM_001048174.2:c.136del	MUTYH	Familial adenomatous polyposis 2	3	2149175646	1425187	1395788	criteria provided, single submitter
+NM_000256.3:c.1574_1580del	MYBPC3	Cardiomyopathy	2	2142860924	1335156	1343457	criteria provided, multiple submitters, no conflicts
+NM_004999.4:c.78del	MYO6	Nonsyndromic genetic hearing loss	1	1771411002	918287	930134	criteria provided, single submitter
+NM_000267.3:c.289-1171_888+1963dup	NF1	Neurofibromatosis, type 1	1		213682	217106	no assertion criteria provided
+NM_001134673.4:c.442G>T	NFIA	Chromosome 1p32-p31 deletion syndrome	1	2100414767	1517543	1526139	criteria provided, single submitter
+NM_133433.4:c.4320+1G>A	NIPBL	Cornelia de Lange syndrome 1	1	587783945	168408	159113	criteria provided, single submitter
+NM_000475.5:c.839del	NR0B1	Congenital adrenal hypoplasia, X-linked	1	2519051116	25994	10955	no assertion criteria provided
+NM_005654.6:c.1024G>A	NR2F1	not provided	2	2149946003	1197432	1209564	criteria provided, conflicting classifications
+NM_000282.4:c.1684_1685del	PCCA	Propionic acidemia	1	2548445261	3399028	3240040	criteria provided, single submitter
+NM_006204.4:c.2005A>G	PDE6C	Retinal dystrophy	2		3409114	3250310	criteria provided, single submitter
+NM_138694.4:c.2257G>T	PKHD1	Autosomal recessive polycystic kidney disease	3	1806573538	933355	941531	criteria provided, multiple submitters, no conflicts
+NM_000302.4:c.2081_2082dup	PLOD1	Ehlers-Danlos syndrome, kyphoscoliotic type 1	1		3042735	2882132	criteria provided, single submitter
+NM_018129.4:c.399G>A	PNPO	not provided	3	766311956	375262	391570	criteria provided, multiple submitters, no conflicts
+NM_005807.6:c.3905_3909del	PRG4	Camptodactyly-arthropathy-coxa vara-pericarditis syndrome	1		3521788	3362579	criteria provided, single submitter
+NM_000313.4:c.1517G>A	PROS1	Thrombophilia due to protein S deficiency, autosomal recessive	3		4846954	4732451	criteria provided, single submitter
+NM_000314.8:c.987dup	PTEN	Hereditary cancer-predisposing syndrome	2		4791215	4676743	criteria provided, single submitter
+NM_005859.5:c.25G>T	PURA	PURA-related severe neonatal hypotonia-seizures-encephalopathy syndrome	3	2479503553	1941500	2418936	criteria provided, single submitter
+NM_025215.6:c.2T>G	PUS1	PUS1-related disorder	1	2541388135	3194994	3032548	criteria provided, single submitter
+NM_002878.4:c.506del	RAD51D	Breast-ovarian cancer, familial, susceptibility to, 4	2	2091604825	845222	839675	criteria provided, multiple submitters, no conflicts
+NM_000321.3:c.506dup	RB1	Retinoblastoma	2	2138091538	1367703	1357807	criteria provided, single submitter
+NM_004260.4:c.1097del	RECQL4	Baller-Gerold syndrome	3	2538078976	2113147	2057860	criteria provided, single submitter
+NM_001371279.1:c.105+471_105+472insA	REEP1	Hereditary spastic paraplegia 31	1	2104392639	977023	989223	criteria provided, single submitter
+NM_000326.5:c.437G>A	RLBP1	Retinitis pigmentosa	3		4799831	4688371	criteria provided, single submitter
+NM_001754.5:c.1088_1100del	RUNX1	Hereditary thrombocytopenia and hematological cancer predisposition syndrome associated with RUNX1	3		3858320	3727697	reviewed by expert panel
+NM_000540.3:c.1441-2A>G	RYR1	Central core myopathy	1	1163185721	3235050	3075759	criteria provided, single submitter
+NM_014363.6:c.708del	SACS	Charlevoix-Saguenay spastic ataxia	1	2542404037	2838272	2678553	criteria provided, single submitter
+NM_002968.3:c.1069del	SALL1	Townes-Brocks syndrome 1	1		3881690	3765522	criteria provided, single submitter
+NM_020436.5:c.474_475del	SALL4	Duane-radial ray syndrome	3	2515718577	2134109	2087818	criteria provided, single submitter
+NM_001172509.2:c.283C>T	SATB2	Chromosome 2q32-q33 deletion syndrome	1		4013626	3897773	criteria provided, single submitter
+NM_001165963.4:c.751A>G	SCN1A	Generalized epilepsy with febrile seizures plus, type 2	1	2105890375	1330072	1339029	criteria provided, conflicting classifications
+NM_001040142.2:c.122del	SCN2A	Seizures, benign familial infantile, 3;Developmental and epileptic encephalopathy, 11	2	2467838286	2089416	2031511	criteria provided, single submitter
+NM_001365536.1:c.2141G>A	SCN9A	not provided	3	1057518162	359378	373040	criteria provided, multiple submitters, no conflicts
+NM_003000.3:c.201-4429_287-934del	SDHB	Pheochromocytoma/paraganglioma syndrome 4	2		513743	523118	no assertion criteria provided
+NM_014159.7:c.5521_5522del	SETD2	Luscan-Lumish syndrome	1	2545519137	2417858	2444125	criteria provided, single submitter
+NM_015046.7:c.1110G>A	SETX	Amyotrophic lateral sclerosis type 4	1	2131463657	1324637	1333867	criteria provided, single submitter
+NM_000231.3:c.87T>A	SGCG	Autosomal recessive limb-girdle muscular dystrophy type 2C	2	1196026821	1437769	1397202	criteria provided, single submitter
+NM_001145358.2:c.3118_3119del	SIN3A	SIN3A-related intellectual disability syndrome due to a point mutation	1	1135401768	424624	431101	criteria provided, single submitter
+NM_020708.5:c.115G>T	SLC12A5	Developmental and epileptic encephalopathy, 34	3	1600590580	648721	659657	criteria provided, single submitter
+NM_000441.2:c.1817del	SLC26A4	Autosomal recessive nonsyndromic hearing loss 4	1		3734365	3601752	criteria provided, single submitter
+NM_000343.4:c.1496G>A	SLC5A1	Congenital glucose-galactose malabsorption	3	927157864	1868594	2138439	criteria provided, single submitter
+NM_001024845.3:c.941dup	SLC6A9	Atypical glycine encephalopathy	2		3790407	3659467	criteria provided, single submitter
+NM_005902.4:c.736del	SMAD3	Aneurysm-osteoarthritis syndrome	1	1595956538	682310	694380	criteria provided, single submitter
+NM_005359.6:c.1477G>C	SMAD4	Carcinoma of pancreas	1	121912578	23577	8538	no assertion criteria provided
+NM_003072.5:c.2681C>G	SMARCA4	Rhabdoid tumor predisposition syndrome 2	2	2089893983	2044544	1990605	criteria provided, conflicting classifications
+NM_000543.5:c.1354dup	SMPD1	Niemann-Pick disease, type B;Niemann-Pick disease, type A	3	2493819725	2083767	2022006	criteria provided, single submitter
+NM_004595.5:c.674T>C	SMS	Syndromic X-linked intellectual disability Snyder type	1	2519671108	2523634	2500736	criteria provided, single submitter
+NM_006772.3:c.1099del	SYNGAP1	Intellectual disability, autosomal dominant 5	1		4643502	4532029	criteria provided, single submitter
+NM_000116.5:c.747_748insCGGGCGCCGGCGGCTCTCC	TAFAZZIN	3-Methylglutaconic aciduria type 2	1	2546049717	2671884	2506912	criteria provided, single submitter
+NM_198253.3:c.2001C>G	TERT	Dyskeratosis congenita, autosomal dominant 2;Idiopathic Pulmonary Fibrosis	3		3876079	3755328	criteria provided, single submitter
+NM_001256317.3:c.767C>T	TMPRSS3	Hearing loss, autosomal recessive	1	1306292205	984449	996723	no assertion criteria provided
+NM_003282.4:c.524AGA[1]	TNNI2	Distal arthrogryposis type 2B1	3	199474801	27476	12437	criteria provided, multiple submitters, no conflicts
+NM_000546.6:c.581_585del	TP53	Li-Fraumeni syndrome	2	2151027842	1064419	1076187	criteria provided, single submitter
+NM_033629.6:c.1A>G	TREX1	Systemic lupus erythematosus	2	761165865	918835	931952	criteria provided, conflicting classifications
+NM_000548.5:c.1091del	TSC2	Tuberous sclerosis 2	3		3787632	3648353	criteria provided, single submitter
+NM_001267550.2:c.95289_95298del	TTN	Autosomal recessive limb-girdle muscular dystrophy type 2J;Dilated cardiomyopathy 1G	3	1575442120	629087	661314	criteria provided, single submitter
+NM_006009.4:c.922C>T	TUBA1A	not provided	2	1565627084	2672138	2507148	criteria provided, conflicting classifications
+NM_003322.6:c.1522C>T	TULP1	Leber congenital amaurosis 15	1	751036771	966096	977978	criteria provided, multiple submitters, no conflicts
+NM_130839.5:c.2429_2434delinsGGA	UBE3A	Angelman syndrome	3		4188464	4075761	criteria provided, single submitter
+NM_144639.3:c.1348C>T	UROC1	Urocanate hydratase deficiency	1	137852795	15446	407	no assertion criteria provided
+NM_206933.4:c.7517A>G	USH2A	not provided	2	937606032	1002509	1016969	criteria provided, conflicting classifications
+NM_025132.4:c.2741C>A	WDR19	Asphyxiating thoracic dystrophy 5	3	766616967	962702	974371	criteria provided, single submitter
+NM_014795.4:c.1165A>C	ZEB2	Mowat-Wilson syndrome	2		4194873	4082197	criteria provided, multiple submitters, no conflicts
+NM_024741.3:c.331-2A>G	ZNF408	Retinitis pigmentosa 72	1		3891669	3775521	criteria provided, single submitter
