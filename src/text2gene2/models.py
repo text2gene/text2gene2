@@ -46,12 +46,14 @@ class Citation(BaseModel):
     """A single PubMed citation with source attribution."""
     pmid: int
     sources: list[Source] = Field(default_factory=list)
-    # Populated lazily by metapub or similar
+    # Populated by pipeline/enrich.py
     title: str | None = None
     authors: str | None = None
     journal: str | None = None
     year: int | None = None
     doi: str | None = None
+    pmc: str | None = None
+    abstract_snippet: str | None = None
     # Set by pipeline/validate.py — "confirmed" | "probable" | "unverified"
     validation_tier: str | None = None
 

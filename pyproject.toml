@@ -30,6 +30,9 @@ dev = [
     "httpx>=0.28",
     "ruff>=0.8",
 ]
+benchmark = [
+    "metapub>=0.5",
+]
 
 [project.scripts]
 hgvs2pmid = "text2gene2.cli:app"

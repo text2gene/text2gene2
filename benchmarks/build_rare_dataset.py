@@ -16,6 +16,9 @@ Strategy:
 
 Usage:
   python benchmarks/build_rare_dataset.py [--max-citations 3] [--target 150] [--output rare_variants.tsv]
+
+Environment (.env or shell):
+  NCBI_API_KEY   — not used directly here, but loaded for consistency with other benchmark scripts
 """
 
 import argparse
@@ -28,6 +31,8 @@ import sys
 import urllib.request
 from collections import defaultdict
 from pathlib import Path
+
+from text2gene2.config import settings  # noqa: F401  (loads .env)
 
 VARIANT_SUMMARY_URL = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
 VAR_CITATIONS_URL   = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/var_citations.txt"

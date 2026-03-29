@@ -58,45 +58,68 @@
     {% endif %}
   </div>
 
-  {# ── Results table ────────────────────────────────────────────────── #}
+  {# ── Citation cards ───────────────────────────────────────────────── #}
   {% if result.citations %}
-  <div class="card" style="padding:0; overflow:hidden;">
-    <table class="results">
-      <thead>
-        <tr>
-          <th style="width:3rem;">Conf</th>
-          <th>PMID</th>
-          <th>Sources</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for citation in result.citations %}
-        <tr>
-          <td>
-            {% for i in range(4) %}
-            <span class="confidence-bar {% if i < citation.confidence %}filled{% endif %}"></span>
-            {% endfor %}
-          </td>
-          <td>
-            <a class="pmid-link"
-               href="https://pubmed.ncbi.nlm.nih.gov/{{ citation.pmid }}/"
-               target="_blank" rel="noopener">
-              {{ citation.pmid }}
-            </a>
-          </td>
-          <td>
-            {% for src in citation.sources %}
-            <span class="source-badge tag-{{ src }}">{{ src }}</span>
-            {% endfor %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size:0.8rem; color:#6c757d; margin-top:0.5rem; text-align:right;">
+  <p style="font-size:0.8rem; color:#6c757d; margin-bottom:0.5rem;">
     {{ result.citations | length }} unique PMIDs
   </p>
+  {% for citation in result.citations %}
+  <div class="card citation-card">
+    <div class="citation-header">
+      {# Confidence dots #}
+      <span class="citation-conf">
+        {% for i in range(4) %}
+        <span class="confidence-bar {% if i < citation.confidence %}filled{% endif %}"></span>
+        {% endfor %}
+      </span>
+
+      {# Source badges #}
+      <span>
+        {% for src in citation.sources %}
+        <span class="source-badge tag-{{ src }}">{{ src }}</span>
+        {% endfor %}
+      </span>
+
+      {# Validation tier #}
+      {% if citation.validation_tier %}
+      <span class="tier-badge tier-{{ citation.validation_tier }}">{{ citation.validation_tier }}</span>
+      {% endif %}
+
+      {# Links #}
+      <span class="citation-links">
+        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ citation.pmid }}/"
+           target="_blank" rel="noopener">PubMed {{ citation.pmid }}</a>
+        {% if citation.pmc %}
+        &middot; <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/{{ citation.pmc }}/"
+                    target="_blank" rel="noopener">PMC</a>
+        {% endif %}
+        {% if citation.doi %}
+        &middot; <a href="https://doi.org/{{ citation.doi }}"
+                    target="_blank" rel="noopener">DOI</a>
+        {% endif %}
+      </span>
+    </div>
+
+    {% if citation.title %}
+    <div class="citation-title">{{ citation.title }}</div>
+    {% else %}
+    <div class="citation-title" style="color:#6c757d; font-style:italic;">PMID {{ citation.pmid }}</div>
+    {% endif %}
+
+    {% if citation.authors or citation.journal or citation.year %}
+    <div class="citation-meta">
+      {% if citation.authors %}<span>{{ citation.authors }}</span>{% endif %}
+      {% if citation.journal %}<span class="citation-journal">{{ citation.journal }}</span>{% endif %}
+      {% if citation.year %}<span>{{ citation.year }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if citation.abstract_snippet %}
+    <div class="citation-abstract">{{ citation.abstract_snippet }}</div>
+    {% endif %}
+  </div>
+  {% endfor %}
+
   {% else %}
   <div class="card" style="text-align:center; color:#6c757d; padding:2rem;">
     No literature found for this variant across any source.

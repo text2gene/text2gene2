@@ -5,9 +5,16 @@ REST API: https://europepmc.org/RestfulWebService
 No API key required. Covers PubMed + PMC + preprints + gray literature.
 Especially useful for recent papers not yet indexed in PubMed.
 
-We search with the gene symbol + protein change, returning PubMed-linked PMIDs.
+Query strategy (in priority order):
+  1. gene + protein change (when protein effect is meaningful, e.g. p.Arg408Trp)
+  2. gene + c. short form (for splice-site, frameshifts, and p.? variants)
+  3. raw input HGVS (last resort)
+
+Returning just the gene name is never acceptable — it produces thousands of
+off-topic results (e.g. searching "CFTR" returns Hsp70 chaperone papers).
 """
 import logging
+import re
 
 import httpx
 
@@ -21,30 +28,53 @@ log = logging.getLogger(__name__)
 
 _BASE = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
 
+# Protein changes that carry no specific information about the variant
+_UNINFORMATIVE_P = {"?", "=", "0", "0?"}
+
+
+def _protein_keyword(hgvs_p_list: list[str]) -> str | None:
+    """
+    Extract a meaningful protein-level search keyword from the first hgvs_p entry.
+    Returns None if the protein effect is unknown/uninformative (p.?, p.=, splice).
+    """
+    for p in hgvs_p_list[:1]:
+        short = p.split(":")[-1] if ":" in p else p
+        short = short.lstrip("p.(").rstrip(")")
+        if short in _UNINFORMATIVE_P or not short:
+            return None
+        # Extract amino-acid + position (e.g. "Arg408" from "Arg408Trp")
+        m = re.match(r"([A-Z][a-z]{0,2}\d+)", short)
+        return f'"{m.group(1)}"' if m else None
+    return None
+
+
+def _coding_keyword(hgvs_c_list: list[str]) -> str | None:
+    """
+    Extract the short c. form (without transcript) as a search keyword.
+    e.g. "NM_000492.4:c.3963+1G>A" → '"c.3963+1G>A"'
+    """
+    for h in hgvs_c_list[:1]:
+        short = h.split(":")[-1] if ":" in h else h
+        if short.startswith("c.") and len(short) > 2:
+            return f'"{short}"'
+    return None
+
 
 def _build_query(lvg: LVGResult) -> str:
-    parts = []
-    if lvg.gene_symbol:
-        parts.append(f'"{lvg.gene_symbol}"')
+    gene = f'"{lvg.gene_symbol}"' if lvg.gene_symbol else None
 
-    # Use a compact protein form as a keyword — strip prefix and complex suffixes
-    # so "NP_009225.1:p.(Q1756Pfs*74)" → "Q1756" (position-level, avoids wildcard issues)
-    for p in lvg.hgvs_p[:1]:
-        short = p.split(":")[-1] if ":" in p else p
-        # Remove p.( prefix variants
-        short = short.lstrip("p.(")
-        # Cut off at first non-AA character sequence (frameshift marker, asterisk, etc.)
-        import re as _re
-        m = _re.match(r"([A-Z][a-z]{0,2}\d+)", short)
-        if m:
-            parts.append(f'"{m.group(1)}"')
-        else:
-            parts.append(f'"{short}"')
+    # Priority 1: gene + meaningful protein change
+    p_kw = _protein_keyword(lvg.hgvs_p)
+    if gene and p_kw:
+        return f"{gene} AND {p_kw}"
 
-    if not parts:
-        parts.append(f'"{lvg.input_hgvs}"')
+    # Priority 2: gene + c. notation (splice sites, frameshifts, intronic, p.?)
+    c_kw = _coding_keyword(lvg.hgvs_c)
+    if gene and c_kw:
+        return f"{gene} AND {c_kw}"
 
-    return " AND ".join(parts)
+    # Priority 3: bare input HGVS — at least variant-specific
+    return f'"{lvg.input_hgvs}"'
 
 
 class EuropePMCSource(PMIDSource):

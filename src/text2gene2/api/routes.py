@@ -8,6 +8,7 @@ from fastapi.templating import Jinja2Templates
 from text2gene2.lvg import get_lvg
 from text2gene2.models import CitationTable, LVGResult
 from text2gene2.pipeline import query_variant
+from text2gene2.pipeline.enrich import enrich_citations
 from text2gene2.pipeline.validate import validate_citations
 
 log = logging.getLogger(__name__)
@@ -19,9 +20,21 @@ templates = Jinja2Templates(directory=str(_templates_dir))
 
 # ── Web UI ──────────────────────────────────────────────────────────────────
 
+# Curated demo variants: rare-disease P/LP, ≤3 ClinVar citations, diverse conditions
+_SAMPLE_VARIANTS = [
+    {"hgvs": "NM_000492.4:c.3963+1G>A", "gene": "CFTR",   "disease": "Cystic fibrosis"},
+    {"hgvs": "NM_000350.3:c.4667+1G>C", "gene": "ABCA4",  "disease": "Retinal dystrophy"},
+    {"hgvs": "NM_000070.3:c.257C>T",    "gene": "CAPN3",  "disease": "Limb-girdle muscular dystrophy 2A"},
+    {"hgvs": "NM_020247.5:c.815G>A",    "gene": "COQ8A",  "disease": "Cerebellar ataxia"},
+    {"hgvs": "NM_000030.3:c.1102G>A",   "gene": "AGXT",   "disease": "Primary hyperoxaluria type I"},
+]
+
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(
+        request=request, name="index.html",
+        context={"sample_variants": _SAMPLE_VARIANTS},
+    )
 
 
 @router.get("/search", response_class=HTMLResponse)
@@ -30,6 +43,7 @@ async def search_page(request: Request, hgvs: str = ""):
     if hgvs:
         try:
             table = await query_variant(hgvs.strip())
+            table = await enrich_citations(table)
             ctx["result"] = table
         except Exception as e:
             log.exception("Pipeline error for %s", hgvs)

@@ -131,6 +131,56 @@
     }
     table.results tr:hover td { background: #f8f9fa; }
 
+    .citation-card { padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+
+    .citation-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+    }
+    .citation-conf { white-space: nowrap; }
+    .citation-links { margin-left: auto; font-size: 0.8rem; color: #6c757d; white-space: nowrap; }
+    .citation-links a { color: #1a3a5c; text-decoration: none; }
+    .citation-links a:hover { text-decoration: underline; }
+
+    .citation-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 0.25rem;
+    }
+    .citation-meta {
+      font-size: 0.8rem;
+      color: #6c757d;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.25rem;
+    }
+    .citation-journal { font-style: italic; }
+    .citation-abstract {
+      font-size: 0.82rem;
+      color: #495057;
+      line-height: 1.5;
+      margin-top: 0.4rem;
+      border-left: 3px solid #dee2e6;
+      padding-left: 0.75rem;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .tier-confirmed  { background: #d1fae5; color: #065f46; }
+    .tier-probable   { background: #fef3c7; color: #92400e; }
+    .tier-unverified { background: #f3f4f6; color: #6b7280; }
+
     footer {
       text-align: center;
       padding: 2rem;

@@ -20,6 +20,23 @@
       <button type="submit">Search</button>
     </div>
   </form>
+
+  <div style="max-width:640px; margin:1rem auto 0; text-align:left;">
+    <p style="font-size:0.78rem; color:#adb5bd; margin-bottom:0.5rem;">Try an example:</p>
+    <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+      {% for v in sample_variants %}
+      <a href="/search?hgvs={{ v.hgvs | urlencode }}"
+         style="display:inline-block; padding:0.3rem 0.7rem; border-radius:999px;
+                background:#eef2f7; border:1px solid #c8d6e8; color:#1a3a5c;
+                font-size:0.78rem; text-decoration:none; white-space:nowrap;"
+         onmouseover="this.style.background='#d4e2f0'"
+         onmouseout="this.style.background='#eef2f7'"
+         title="{{ v.disease }}">
+        <strong>{{ v.gene }}</strong>&thinsp;{{ v.hgvs.split(':')[1] }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1rem;">

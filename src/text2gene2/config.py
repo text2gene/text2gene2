@@ -32,5 +32,15 @@ class Settings(BaseSettings):
     app_port: int = 8000
     app_debug: bool = False
 
+    # Benchmark / tooling
+    text2gene2_api: str = "http://loki.local"
+
+    # UTA (Universal Transcript Archive) — for metavariant HGVS synonym expansion
+    uta_host:   str = "uta.biocommons.org"
+    uta_port:   int = 5432
+    uta_user:   str = "anonymous"
+    uta_pass:   str = "anonymous"
+    uta_schema: str = "uta_20210129b"
+
 
 settings = Settings()

@@ -12,6 +12,9 @@ text2gene2 is queried concurrently via its API (async, rate-limited).
 
 Usage:
   python benchmarks/build_hht_dataset.py [--api http://loki.local] [--concurrency 8]
+
+Environment (.env or shell):
+  TEXT2GENE2_API   — text2gene2 base URL (default: http://loki.local)
 """
 
 import argparse
@@ -27,6 +30,8 @@ from collections import defaultdict
 from pathlib import Path
 
 import httpx
+
+from text2gene2.config import settings
 
 HHT_GENES = {"ENG", "ACVRL1", "SMAD4", "GDF2"}
 
@@ -290,8 +295,8 @@ async def main_async(args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                   formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--api", default="http://loki.local",
-                    help="text2gene2 base URL (default: http://loki.local)")
+    ap.add_argument("--api", default=settings.text2gene2_api,
+                    help=f"text2gene2 base URL (default: {settings.text2gene2_api})")
     ap.add_argument("--concurrency", type=int, default=8,
                     help="Concurrent text2gene2 requests (default: 8)")
     ap.add_argument("--output", default="benchmarks/hht_benchmark.tsv")
