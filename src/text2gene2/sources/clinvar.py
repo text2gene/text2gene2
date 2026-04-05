@@ -75,6 +75,10 @@ class ClinVarSource(PMIDSource):
         cache_key = f"clinvar:{lvg.input_hgvs}"
         cached = await cache_get(cache_key)
         if cached is not None:
+            if isinstance(cached, dict):
+                prov = {int(k): v for k, v in cached.get("prov", {}).items()}
+                return SourceResult(source=self.source, pmids=cached["pmids"],
+                                    pmid_provenance=prov, cached=True)
             return SourceResult(source=self.source, pmids=cached, cached=True)
 
         all_pmids: set[int] = set()
@@ -108,6 +112,8 @@ class ClinVarSource(PMIDSource):
                         all_pmids.add(pmid)
 
         result = sorted(all_pmids)
-        await cache_set(cache_key, result, ttl=settings.cache_ttl_clinvar)
+        prov_str = {str(k): v for k, v in provenance.items()}
+        await cache_set(cache_key, {"pmids": result, "prov": prov_str},
+                        ttl=settings.cache_ttl_clinvar)
         return SourceResult(source=self.source, pmids=result,
                             pmid_provenance=provenance)

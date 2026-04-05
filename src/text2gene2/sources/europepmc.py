@@ -68,6 +68,11 @@ class EuropePMCSource(PMIDSource):
         cache_key = f"europepmc:{lvg.input_hgvs}"
         cached = await cache_get(cache_key)
         if cached is not None:
+            if isinstance(cached, dict):
+                prov = {int(k): v for k, v in cached.get("prov", {}).items()}
+                return SourceResult(source=self.source, pmids=cached["pmids"],
+                                    pmid_provenance=prov,
+                                    query_used=cached.get("query"), cached=True)
             return SourceResult(source=self.source, pmids=cached, cached=True)
 
         query = await build_europepmc_query(lvg)
@@ -116,6 +121,8 @@ class EuropePMCSource(PMIDSource):
                     provenance[pmid_int] = match
 
         result = sorted(set(pmids))
-        await cache_set(cache_key, result, ttl=settings.cache_ttl_europepmc)
+        prov_str = {str(k): v for k, v in provenance.items()}
+        await cache_set(cache_key, {"pmids": result, "prov": prov_str, "query": query},
+                        ttl=settings.cache_ttl_europepmc)
         return SourceResult(source=self.source, pmids=result, query_used=query,
                             pmid_provenance=provenance)
