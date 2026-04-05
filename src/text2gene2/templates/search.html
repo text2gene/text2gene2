@@ -222,6 +222,15 @@
     {% if citation.abstract_snippet %}
     <div class="citation-abstract">{{ citation.abstract_snippet }}</div>
     {% endif %}
+
+    {% if citation.found_by %}
+    <div class="citation-provenance">
+      Found via:
+      {% for src, form in citation.found_by.items() %}
+        <span class="prov-tag tag-{{ src }}">{{ src }}: {{ form }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
   {% endfor %}
 

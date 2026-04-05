@@ -106,12 +106,17 @@ class LitVar2Source(PMIDSource):
                 log.debug("LitVar2: no rsIDs found for %s", lvg.input_hgvs)
                 return SourceResult(source=self.source, pmids=[])
 
-            # Fetch publications for each rsID
+            # Fetch publications for each rsID, tracking which rsID found which PMID
             all_pmids: set[int] = set()
+            provenance: dict[int, str] = {}
             for rsid in rsids:
                 pmids = await _publications(rsid, client)
-                all_pmids.update(pmids)
+                for pmid in pmids:
+                    if pmid not in all_pmids:
+                        provenance[pmid] = rsid
+                    all_pmids.add(pmid)
 
         result = sorted(all_pmids)
         await cache_set(cache_key, result, ttl=settings.cache_ttl_litvar2)
-        return SourceResult(source=self.source, pmids=result)
+        return SourceResult(source=self.source, pmids=result,
+                            pmid_provenance=provenance)
