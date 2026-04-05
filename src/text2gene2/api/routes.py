@@ -25,13 +25,20 @@ templates = Jinja2Templates(directory=str(_templates_dir))
 
 # ── Web UI ──────────────────────────────────────────────────────────────────
 
-# Curated demo variants: rare-disease P/LP, ≤3 ClinVar citations, diverse conditions
+# Curated demo variants: rare/orphan disease P/LP, diverse conditions
 _SAMPLE_VARIANTS = [
-    {"hgvs": "NM_000492.4:c.3963+1G>A", "gene": "CFTR",   "disease": "Cystic fibrosis"},
-    {"hgvs": "NM_000350.3:c.4667+1G>C", "gene": "ABCA4",  "disease": "Retinal dystrophy"},
-    {"hgvs": "NM_000070.3:c.257C>T",    "gene": "CAPN3",  "disease": "Limb-girdle muscular dystrophy 2A"},
-    {"hgvs": "NM_020247.5:c.815G>A",    "gene": "COQ8A",  "disease": "Cerebellar ataxia"},
-    {"hgvs": "NM_000030.3:c.1102G>A",   "gene": "AGXT",   "disease": "Primary hyperoxaluria type I"},
+    {"hgvs": "NM_000020.3:c.717G>A",      "gene": "ACVRL1", "disease": "Hereditary hemorrhagic telangiectasia"},
+    {"hgvs": "NM_000492.4:c.1573del",     "gene": "CFTR",   "disease": "Cystic fibrosis"},
+    {"hgvs": "NM_000138.5:c.4710G>A",     "gene": "FBN1",   "disease": "Marfan syndrome"},
+    {"hgvs": "NM_000277.3:c.866G>A",      "gene": "PAH",    "disease": "Phenylketonuria"},
+    {"hgvs": "NM_000169.3:c.160C>T",      "gene": "GLA",    "disease": "Fabry disease"},
+    {"hgvs": "NM_000152.5:c.1846dup",     "gene": "GAA",    "disease": "Pompe disease"},
+    {"hgvs": "NM_000053.4:c.3270C>G",     "gene": "ATP7B",  "disease": "Wilson disease"},
+    {"hgvs": "NM_001110792.2:c.337C>T",   "gene": "MECP2",  "disease": "Rett syndrome"},
+    {"hgvs": "NM_000520.6:c.465del",      "gene": "HEXA",   "disease": "Tay-Sachs disease"},
+    {"hgvs": "NM_000350.3:c.4312C>G",     "gene": "ABCA4",  "disease": "Stargardt disease"},
+    {"hgvs": "NM_000551.4:c.444del",      "gene": "VHL",    "disease": "Von Hippel-Lindau syndrome"},
+    {"hgvs": "NM_001114753.3:c.715dup",   "gene": "ENG",    "disease": "Hereditary hemorrhagic telangiectasia"},
 ]
 
 @router.get("/", response_class=HTMLResponse)
