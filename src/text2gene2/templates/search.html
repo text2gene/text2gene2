@@ -33,24 +33,95 @@
     </div>
     {% if result.lvg.warnings %}
     <div style="margin-top:0.5rem; color:#dc6815;">
-      {% for w in result.lvg.warnings %}<div>⚠ {{ w }}</div>{% endfor %}
+      {% for w in result.lvg.warnings %}<div>{{ w }}</div>{% endfor %}
     </div>
     {% endif %}
   </div>
   {% endif %}
 
+  {# ── Query expansion detail ────────────────────────────────────────── #}
+  {% if expansion %}
+  <details class="card" style="margin-top:0.5rem; cursor:pointer;">
+    <summary style="font-size:0.85rem; font-weight:600; color:#1a3a5c;">
+      Query expansion
+      <span style="font-weight:400; color:#6c757d;">
+        &mdash; {{ expansion.all_search_forms | length }} search forms
+        {% if gene_synonyms and gene_synonyms | length > 1 %}
+          across {{ gene_synonyms | length }} gene names
+        {% endif %}
+      </span>
+    </summary>
+    <div style="margin-top:0.75rem; font-size:0.82rem;">
+
+      {% if gene_synonyms and gene_synonyms | length > 1 %}
+      <div style="margin-bottom:0.6rem;">
+        <span style="color:#6c757d; font-weight:600;">Gene names:</span>
+        {% for syn in gene_synonyms %}
+          <code style="{% if loop.first %}font-weight:700;{% endif %}">{{ syn }}</code>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if expansion.protein_short %}
+      <div style="margin-bottom:0.4rem;">
+        <span class="expand-label">Protein</span>
+        {% for p in expansion.protein_short %}<code>{{ p }}</code> {% endfor %}
+        {% for p in expansion.protein_1letter %}<code class="expand-slang">{{ p }}</code> {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if expansion.coding_short %}
+      <div style="margin-bottom:0.4rem;">
+        <span class="expand-label">Coding</span>
+        {% for c in expansion.coding_short %}<code>{{ c }}</code> {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if expansion.slang %}
+      <div style="margin-bottom:0.4rem;">
+        <span class="expand-label">Alternate notations</span>
+        {% for s in expansion.slang %}<code class="expand-slang">{{ s }}</code> {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if expansion.rsids %}
+      <div style="margin-bottom:0.4rem;">
+        <span class="expand-label">rsID</span>
+        {% for r in expansion.rsids %}<code>{{ r }}</code> {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if expansion.genomic_short %}
+      <div style="margin-bottom:0.4rem;">
+        <span class="expand-label">Genomic</span>
+        {% for g in expansion.genomic_short %}<code>{{ g }}</code> {% endfor %}
+      </div>
+      {% endif %}
+
+    </div>
+  </details>
+  {% endif %}
+
   {# ── Source summary ───────────────────────────────────────────────── #}
   <div style="display:flex; gap:0.75rem; margin:1rem 0; flex-wrap:wrap;">
     {% for source, pmids in result.by_source.items() %}
-    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:120px; text-align:center;">
-      <div class="tag tag-{{ source }}">{{ source }}</div>
-      <div style="font-size:1.5rem; font-weight:700; margin-top:0.25rem;">{{ pmids | length }}</div>
-      <div style="font-size:0.75rem; color:#6c757d;">PMIDs</div>
+    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:140px;">
+      <div style="text-align:center;">
+        <div class="tag tag-{{ source }}">{{ source }}</div>
+        <div style="font-size:1.5rem; font-weight:700; margin-top:0.25rem;">{{ pmids | length }}</div>
+        <div style="font-size:0.75rem; color:#6c757d;">PMIDs</div>
+      </div>
+      {% if result.queries.get(source) %}
+      <div style="margin-top:0.5rem; font-size:0.7rem; color:#6c757d; word-break:break-all;
+                  border-top:1px solid #f1f3f5; padding-top:0.4rem;">
+        <span style="font-weight:600;">Query:</span> {{ result.queries[source] }}
+      </div>
+      {% endif %}
     </div>
     {% endfor %}
     {% if result.errors %}
     {% for source, err in result.errors.items() %}
-    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:120px; border-color:#fca5a5;">
+    <div class="card" style="padding:0.75rem 1rem; flex:1; min-width:140px; border-color:#fca5a5;">
       <div class="tag" style="background:#fee2e2;color:#b91c1c;">{{ source }}</div>
       <div style="font-size:0.75rem; color:#b91c1c; margin-top:0.25rem;">{{ err }}</div>
     </div>
@@ -58,16 +129,38 @@
     {% endif %}
   </div>
 
+  {# ── Results summary bar ──────────────────────────────────────────── #}
+  {% if result.citations %}
+  <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+    <span style="font-size:0.9rem; font-weight:600; color:#1a3a5c;">
+      {{ result.citations | length }} unique PMIDs
+    </span>
+    {% set confirmed = result.citations | selectattr("validation_tier", "equalto", "confirmed") | list | length %}
+    {% set probable = result.citations | selectattr("validation_tier", "equalto", "probable") | list | length %}
+    {% set unverified = result.citations | length - confirmed - probable %}
+    {% if confirmed or probable %}
+    <span style="font-size:0.8rem; color:#6c757d;">
+      {% if confirmed %}<span class="tier-badge tier-confirmed">{{ confirmed }} confirmed</span>{% endif %}
+      {% if probable %}<span class="tier-badge tier-probable">{{ probable }} probable</span>{% endif %}
+      {% if unverified %}<span class="tier-badge tier-unverified">{{ unverified }} unverified</span>{% endif %}
+    </span>
+    {% endif %}
+    {% set multi_source = result.citations | selectattr("confidence", "gt", 1) | list | length %}
+    {% if multi_source %}
+    <span style="font-size:0.78rem; color:#6c757d;">
+      {{ multi_source }} found by multiple sources
+    </span>
+    {% endif %}
+  </div>
+  {% endif %}
+
   {# ── Citation cards ───────────────────────────────────────────────── #}
   {% if result.citations %}
-  <p style="font-size:0.8rem; color:#6c757d; margin-bottom:0.5rem;">
-    {{ result.citations | length }} unique PMIDs
-  </p>
   {% for citation in result.citations %}
   <div class="card citation-card">
     <div class="citation-header">
       {# Confidence dots #}
-      <span class="citation-conf">
+      <span class="citation-conf" title="{{ citation.confidence }} source{{ 's' if citation.confidence != 1 }}">
         {% for i in range(4) %}
         <span class="confidence-bar {% if i < citation.confidence %}filled{% endif %}"></span>
         {% endfor %}
@@ -82,13 +175,20 @@
 
       {# Validation tier #}
       {% if citation.validation_tier %}
-      <span class="tier-badge tier-{{ citation.validation_tier }}">{{ citation.validation_tier }}</span>
+      <span class="tier-badge tier-{{ citation.validation_tier }}"
+            title="{% if citation.validation_tier == 'confirmed' %}Variant notation found in abstract{% elif citation.validation_tier == 'probable' %}Gene + position found in abstract{% else %}Not yet verified against abstract text{% endif %}">
+        {{ citation.validation_tier }}
+      </span>
       {% endif %}
 
       {# Links #}
       <span class="citation-links">
         <a href="https://pubmed.ncbi.nlm.nih.gov/{{ citation.pmid }}/"
            target="_blank" rel="noopener">PubMed {{ citation.pmid }}</a>
+        {% if citation.bookshelf_id %}
+        &middot; <a href="https://www.ncbi.nlm.nih.gov/books/{{ citation.bookshelf_id }}/"
+                    target="_blank" rel="noopener">Bookshelf</a>
+        {% endif %}
         {% if citation.pmc %}
         &middot; <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/{{ citation.pmc }}/"
                     target="_blank" rel="noopener">PMC</a>
@@ -101,7 +201,12 @@
     </div>
 
     {% if citation.title %}
-    <div class="citation-title">{{ citation.title }}</div>
+    <div class="citation-title">
+      {{ citation.title }}
+      {% if citation.bookshelf_id %}
+        <span class="tag" style="background:#fef3c7;color:#92400e;vertical-align:middle;margin-left:0.3rem;">Book</span>
+      {% endif %}
+    </div>
     {% else %}
     <div class="citation-title" style="color:#6c757d; font-style:italic;">PMID {{ citation.pmid }}</div>
     {% endif %}
@@ -127,7 +232,7 @@
   {% endif %}
 
 {% elif not error %}
-{# Empty state — form submitted but no query yet (shouldn't normally happen) #}
+{# Empty state #}
 <div class="card" style="text-align:center; color:#6c757d; padding:2rem;">
   Enter an HGVS variant above to search.
 </div>

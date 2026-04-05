@@ -40,6 +40,7 @@ class SourceResult(BaseModel):
     pmids: list[int] = Field(default_factory=list)
     error: str | None = None
     cached: bool = False
+    query_used: str | None = None  # the actual query string sent to the source
 
 
 class Citation(BaseModel):
@@ -53,6 +54,7 @@ class Citation(BaseModel):
     year: int | None = None
     doi: str | None = None
     pmc: str | None = None
+    bookshelf_id: str | None = None   # e.g. NBK1283 for GeneReviews chapters
     abstract_snippet: str | None = None
     # Set by pipeline/validate.py — "confirmed" | "probable" | "unverified"
     validation_tier: str | None = None
@@ -70,6 +72,7 @@ class CitationTable(BaseModel):
     by_source: dict[Source, list[int]] = Field(default_factory=dict)
     citations: list[Citation] = Field(default_factory=list)
     errors: dict[Source, str] = Field(default_factory=dict)
+    queries: dict[Source, str] = Field(default_factory=dict)  # query string used per source
 
     @property
     def all_pmids(self) -> list[int]:
@@ -81,10 +84,13 @@ class CitationTable(BaseModel):
         errors: dict[Source, str] = {}
         by_source: dict[Source, list[int]] = {}
 
+        queries: dict[Source, str] = {}
         for r in results:
             by_source[r.source] = r.pmids
             if r.error:
                 errors[r.source] = r.error
+            if r.query_used:
+                queries[r.source] = r.query_used
             for pmid in r.pmids:
                 pmid_sources.setdefault(pmid, []).append(r.source)
 
@@ -93,7 +99,8 @@ class CitationTable(BaseModel):
             for pmid, sources in sorted(pmid_sources.items(), key=lambda x: -len(x[1]))
         ]
 
-        return cls(input_hgvs=hgvs, lvg=lvg, by_source=by_source, citations=citations, errors=errors)
+        return cls(input_hgvs=hgvs, lvg=lvg, by_source=by_source,
+                   citations=citations, errors=errors, queries=queries)
 
 
 class BatchJob(BaseModel):

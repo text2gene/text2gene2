@@ -12,12 +12,12 @@ This is run automatically for web UI requests but skipped for the JSON API
 """
 import asyncio
 import logging
-import os
 from xml.etree import ElementTree
 
 import httpx
 
 from text2gene2.cache import cache_get, cache_set
+from text2gene2.db import get_medgen_conn, reset_medgen_conn
 from text2gene2.models import Citation, CitationTable
 from text2gene2 import rate_limit
 from text2gene2.config import settings
@@ -31,25 +31,6 @@ _TTL     = 60 * 60 * 24 * 30   # 30 days — article metadata is stable
 
 # ── Local DB ──────────────────────────────────────────────────────────────────
 
-_db_conn = None
-
-def _get_db_conn():
-    """Lazy singleton psycopg2 connection to the local medgen DB."""
-    global _db_conn
-    db_url = os.environ.get("METAPUB_DB_URL")
-    if not db_url:
-        return None
-    try:
-        import psycopg2
-        if _db_conn is None or _db_conn.closed:
-            _db_conn = psycopg2.connect(db_url)
-            _db_conn.set_session(readonly=True, autocommit=True)
-        return _db_conn
-    except Exception as e:
-        log.warning("enrich: local DB connect failed: %s", e)
-        return None
-
-
 _SELECT_LOCAL = """
 SELECT pmid, title, authors, journal, year, doi, pmc_id, abstract
 FROM pubmed.article
@@ -58,7 +39,7 @@ WHERE pmid = ANY(%s)
 
 def _fetch_meta_local_sync(pmids: list[int]) -> dict[int, dict]:
     """Query pubmed.article for structured metadata. Returns {pmid: meta_dict}."""
-    conn = _get_db_conn()
+    conn = get_medgen_conn()
     if conn is None or not pmids:
         return {}
     try:
@@ -67,8 +48,7 @@ def _fetch_meta_local_sync(pmids: list[int]) -> dict[int, dict]:
             rows = cur.fetchall()
     except Exception as e:
         log.warning("enrich: local DB query error: %s", e)
-        global _db_conn
-        _db_conn = None
+        reset_medgen_conn()
         return {}
 
     result = {}
@@ -155,6 +135,52 @@ def _parse_article(article) -> dict:
     return meta
 
 
+def _parse_book_article(book_article) -> dict:
+    """Extract metadata from a PubmedBookArticle XML element (e.g. GeneReviews)."""
+    meta: dict = {}
+
+    # Book articles use BookDocument/ArticleTitle
+    title_el = book_article.find(".//ArticleTitle")
+    if title_el is not None:
+        meta["title"] = "".join(title_el.itertext()).strip().rstrip(".")
+
+    # Authors in BookDocument
+    meta["authors"] = _first_author(book_article)
+
+    # Book title as journal equivalent (e.g. "GeneReviews")
+    book_title = book_article.find(".//BookTitle")
+    if book_title is not None:
+        meta["journal"] = "".join(book_title.itertext()).strip()
+
+    # Year — try ContributionDate first (chapter revision), then PubDate
+    for xpath in [".//ContributionDate/Year", ".//PubDate/Year",
+                  ".//BeginningDate/Year"]:
+        yr = book_article.findtext(xpath)
+        if yr and yr.isdigit():
+            meta["year"] = int(yr)
+            break
+
+    # Book accession ID (e.g. NBK1283) — useful for linking
+    for id_el in book_article.findall(".//ArticleId"):
+        id_type = id_el.get("IdType", "")
+        val = (id_el.text or "").strip()
+        if id_type == "bookaccession" and val:
+            meta["bookshelf_id"] = val
+        elif id_type == "doi" and val:
+            meta["doi"] = val
+
+    # Abstract / Sections — GeneReviews chapters have section content
+    sections = book_article.findall(".//Abstract/AbstractText")
+    if not sections:
+        sections = book_article.findall(".//Section/SectionTitle")
+    parts = [el.text for el in sections if el.text]
+    if parts:
+        full = " ".join(parts)
+        meta["abstract_snippet"] = full[:400] + ("…" if len(full) > 400 else "")
+
+    return meta
+
+
 async def _fetch_meta_ncbi(pmids: list[int]) -> dict[int, dict]:
     """Fetch metadata from NCBI efetch for a batch of PMIDs."""
     result: dict[int, dict] = {}
@@ -171,12 +197,23 @@ async def _fetch_meta_ncbi(pmids: list[int]) -> dict[int, dict]:
             resp = await client.get(f"{_EUTILS}/efetch.fcgi", params=params, timeout=30.0)
             resp.raise_for_status()
             tree = ElementTree.fromstring(resp.text)
+
+            # Standard journal articles
             for article in tree.findall(".//PubmedArticle"):
                 pmid_el = article.find(".//PMID")
                 if pmid_el is None or not pmid_el.text:
                     continue
                 pmid = int(pmid_el.text)
                 result[pmid] = _parse_article(article)
+
+            # Book articles (GeneReviews, NCBI Bookshelf)
+            for book in tree.findall(".//PubmedBookArticle"):
+                pmid_el = book.find(".//PMID")
+                if pmid_el is None or not pmid_el.text:
+                    continue
+                pmid = int(pmid_el.text)
+                result[pmid] = _parse_book_article(book)
+
     except Exception as e:
         log.warning("enrich: NCBI efetch error for batch starting %d: %s", pmids[0], e)
     return result
@@ -238,6 +275,7 @@ async def enrich_citations(table: CitationTable) -> CitationTable:
         if meta.get("doi"):
             citation.doi = meta["doi"]
         citation.pmc              = meta.get("pmc")
+        citation.bookshelf_id     = meta.get("bookshelf_id")
         citation.abstract_snippet = meta.get("abstract_snippet")
 
     return table

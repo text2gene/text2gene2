@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     google_cse_whitelist_id: str = "009155410218757639293:nyh3tdzvfhc"
     google_cse_schema_id: str = "003914143621252222636:-mop04_esug"
 
+    # Medgen PostgreSQL (shared across enrich, expand, and future local sources)
+    medgen_db_url: str = "postgresql://medgen:medgen@loki.local:5432/medgen"
+
     # Redis
     redis_url: str = "redis://localhost:6379/0"
 

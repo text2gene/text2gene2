@@ -181,6 +181,29 @@
     .tier-probable   { background: #fef3c7; color: #92400e; }
     .tier-unverified { background: #f3f4f6; color: #6b7280; }
 
+    details summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::before {
+      content: "\25B6\FE0E";
+      display: inline-block;
+      margin-right: 0.4rem;
+      font-size: 0.7rem;
+      transition: transform 0.15s;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+
+    .expand-label {
+      display: inline-block;
+      width: 9rem;
+      color: #6c757d;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+    .expand-slang {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+    }
+
     footer {
       text-align: center;
       padding: 2rem;

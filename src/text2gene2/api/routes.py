@@ -9,6 +9,7 @@ from text2gene2.lvg import get_lvg
 from text2gene2.models import CitationTable, LVGResult
 from text2gene2.pipeline import query_variant
 from text2gene2.pipeline.enrich import enrich_citations
+from text2gene2.pipeline.expand import expand_variant, get_gene_synonyms
 from text2gene2.pipeline.validate import validate_citations
 
 log = logging.getLogger(__name__)
@@ -39,11 +40,17 @@ async def index(request: Request):
 
 @router.get("/search", response_class=HTMLResponse)
 async def search_page(request: Request, hgvs: str = ""):
-    ctx: dict = {"hgvs": hgvs, "result": None, "error": None}
+    ctx: dict = {"hgvs": hgvs, "result": None, "error": None,
+                 "expansion": None, "gene_synonyms": None}
     if hgvs:
         try:
             table = await query_variant(hgvs.strip())
             table = await enrich_citations(table)
+            # Build expansion info for display
+            if table.lvg:
+                ctx["expansion"] = expand_variant(table.lvg)
+                if table.lvg.gene_symbol:
+                    ctx["gene_synonyms"] = await get_gene_synonyms(table.lvg.gene_symbol)
             ctx["result"] = table
         except Exception as e:
             log.exception("Pipeline error for %s", hgvs)

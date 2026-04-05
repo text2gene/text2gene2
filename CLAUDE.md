@@ -30,6 +30,10 @@ deploy/         nginx config, systemd service, install.sh, update-dns.sh
 - **DNS**: text2gene.org via Gandi LiveDNS API (key in nthmost-systems/.secrets/gandi-apikey)
 - **Dynamic DNS cron**: `/usr/local/bin/text2gene-update-dns` every 15 min on loki
 - **Deployment**: `rsync -az src/ loki.local:/opt/text2gene2/src/ && ssh loki.local "sudo systemctl restart text2gene2"`
+- **PostgreSQL (medgen)**: loki.local, port 5432, user `medgen`, password `medgen`.
+  Open to LAN (192.168.0.0/16 + IPv6, scram-sha-256). Contains medgen-stacks data
+  (hgnc, clinvar, gene, hpo, orphanet, disgenet, pubtator, pubmed, pmc) and the
+  `lovd` schema (84,660 instances across 44,978 genes, scraped 2026-03-29).
 
 ### LLM Router
 **spartacus.local:4000** — OpenAI-compatible LiteLLM router across local and cloud models.
@@ -70,6 +74,44 @@ No auth key required on LAN.
 
 LitVar2 bulk FTP: `https://ftp.ncbi.nlm.nih.gov/pub/lu/LitVar/litvar2_variants.json.gz`
 — 1.8GB, newline-delimited JSON, `gene` field is a list, `all_hgvs` format is `"count|short_hgvs"`
+
+### Planned: LOVD (Leiden Open Variation Database)
+
+LOVD instances are per-gene locus-specific databases (LSDBs) hosted on various
+domains. Each instance holds curated variants with literature references (PMIDs + DOIs).
+
+**Prior art in sibling repos** (do not re-invent — port/adapt these):
+
+- **`medgen-stacks/stacks/lovd/scrape.py`** — Scrapes the LSDB index at
+  `https://grenada.lumc.nl/LSDB_list/lsdbs` to build a gene→LOVD-instance mapping.
+  Stores into `lovd.lsdb` table in medgen Postgres (gene, name, url, curator,
+  n_variants, db_type). Resumable via `lovd.scrape_log`. **Scrape has been run:**
+  84,660 instances across 44,978 genes (last_seen 2026-03-29). Dominated by
+  LOVD 3.X (54K) and ClinVar (28K) entries.
+
+- **`metavariant/metavariant/lovd.py`** — `LOVDVariant` class with two extraction paths:
+  - REST API (`/shared/api/rest.php/variants/{symbol}`) → Atom/XML, parsed with xmltodict
+  - HTML scraping of variant view page → extracts PMIDs and DOIs from reference columns
+  - Key functions: `get_variants_for_gene_name()` (API), `get_variants_with_annotations_for_gene_name()` (HTML+PMIDs)
+  - Default domain: `databases.lovd.nl`
+
+- **`text2gene/text2gene/lsdb/lovd.py`** — Original text2gene LOVD module. Hardcoded
+  gene lists for `dmd.nl` and `chromium.lovd.nl` hosts, plus generic
+  `databases.lovd.nl/shared` fallback. Constructs search URLs from gene + c.DNA position.
+
+**Integration plan for text2gene2:**
+1. Use the grenada.lumc.nl index (from medgen-stacks scrape or a local cache/export)
+   to resolve gene → LOVD instance URL(s)
+2. Query the LOVD instance API/page for the specific variant using metavariant-style parsing
+3. Extract PMIDs from reference columns
+4. Implement as `sources/lovd.py` subclassing `PMIDSource`, add `LOVD` to `Source` enum
+
+### Planned: Query Expansion (LLM-assisted)
+
+For variants that return 0 or very few PMIDs from all sources, use the LiteLLM router
+to generate alternate search terms (gene + natural-language mutation description,
+pathway terms, protein domain names, etc.) and re-query text-based sources
+(EuropePMC, Google CSE). Could sit as a fallback step after fanout when results are sparse.
 
 ## Known Issues / Watch Out For
 
