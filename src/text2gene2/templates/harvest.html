@@ -120,16 +120,46 @@ function render(d) {
     const pmidCount = refTypes["pmid"] || 0;
     const doiCount = refTypes["doi"] || 0;
     const totalVariants = t.variants || 0;
+    const resolver = d.resolver || {};
+    const unresolved = resolver.unresolved || 0;
+    const resolverRunning = resolver.running || false;
+    const resolverLog = resolver.log || [];
     const pctResolved = totalVariants > 0 ? (pmidCount / totalVariants * 100).toFixed(1) : 0;
-    resDiv.innerHTML = `
-      <div style="display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+
+    let statusBadge;
+    if (resolverRunning) {
+      statusBadge = `<span style="display:inline-block; padding:0.2rem 0.6rem; border-radius:999px;
+        font-size:0.75rem; font-weight:600; background:#d1fae5; color:#065f46; margin-left:0.5rem;">Resolver running</span>`;
+    } else if (unresolved > 0) {
+      statusBadge = `<span style="display:inline-block; padding:0.2rem 0.6rem; border-radius:999px;
+        font-size:0.75rem; font-weight:600; background:#fef3c7; color:#92400e; margin-left:0.5rem;">${unresolved} unresolved</span>`;
+    } else if (pmidCount > 0) {
+      statusBadge = `<span style="display:inline-block; padding:0.2rem 0.6rem; border-radius:999px;
+        font-size:0.75rem; font-weight:600; background:#dbeafe; color:#1e40af; margin-left:0.5rem;">Complete</span>`;
+    } else {
+      statusBadge = "";
+    }
+
+    let html = `
+      <div style="display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center; margin-bottom:0.5rem;">
         <div><span style="font-size:1.3rem; font-weight:700; color:#2e7d32;">${pmidCount}</span> PMIDs</div>
         <div><span style="font-size:1.3rem; font-weight:700; color:#1565c0;">${doiCount}</span> DOIs</div>
         <div style="color:#6c757d;">${pctResolved}% of variants have a PMID</div>
+        ${statusBadge}
       </div>
-      <div style="height:8px; background:#e9ecef; border-radius:4px; overflow:hidden; max-width:400px;">
+      <div style="height:8px; background:#e9ecef; border-radius:4px; overflow:hidden; max-width:400px; margin-bottom:0.75rem;">
         <div style="height:100%; width:${pctResolved}%; background:#2e7d32; transition:width 0.5s;"></div>
       </div>`;
+
+    if (resolverLog.length > 0) {
+      html += `<details${resolverRunning ? " open" : ""}>
+        <summary style="font-size:0.8rem; color:#6c757d; cursor:pointer;">Resolver log</summary>
+        <pre style="margin-top:0.4rem; font-size:0.7rem; line-height:1.4; background:#f8f9fa;
+          padding:0.5rem; border-radius:4px; max-height:200px; overflow-y:auto; white-space:pre-wrap;">${resolverLog.map(esc).join("\\n")}</pre>
+      </details>`;
+    }
+
+    resDiv.innerHTML = html;
   } catch(e) {
     resDiv.textContent = "Loading...";
   }

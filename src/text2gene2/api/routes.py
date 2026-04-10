@@ -267,14 +267,22 @@ async def harvest_status():
                     SELECT ref_type, COUNT(*) FROM lovd.variant_ref GROUP BY ref_type
                 """)
                 stats["ref_types"] = {r[0]: r[1] for r in cur.fetchall()}
+                stats["totals"]["pmids"] = stats["ref_types"].get("pmid", 0)
 
-                # Check if resolver is running (recent writes in last 2 min)
+                # How many variants have citation text but no PMID yet?
                 cur.execute("""
-                    SELECT COUNT(*) FROM lovd.variant_ref
-                    WHERE ref_type = 'pmid'
+                    SELECT COUNT(*) FROM lovd.variant v
+                    WHERE (v.all_fields->>'VariantOnGenome/Reference' IS NOT NULL
+                           AND v.all_fields->>'VariantOnGenome/Reference' NOT IN ('-', ''))
+                      AND NOT EXISTS (
+                        SELECT 1 FROM lovd.variant_ref vr
+                        WHERE vr.gene = v.gene AND vr.hgvs_cdna = v.hgvs_cdna
+                          AND vr.source_host = v.source_host AND vr.ref_type = 'pmid'
+                      )
                 """)
-                current_pmids = cur.fetchone()[0]
-                stats["totals"]["pmids"] = current_pmids
+                stats["resolver"] = {
+                    "unresolved": cur.fetchone()[0],
+                }
 
                 # Error breakdown
                 cur.execute("""
@@ -300,17 +308,36 @@ async def harvest_status():
 
     await asyncio.to_thread(_query_stats)
 
-    # Read last N lines of harvest log
-    try:
-        result = await asyncio.to_thread(
-            lambda: __import__("subprocess").run(
-                ["ssh", "loki.local", "tail", "-20", "/var/log/medgen-stacks/harvest.log"],
-                capture_output=True, text=True, timeout=5
+    # Read log files and check processes — all local on loki
+    def _read_logs():
+        import subprocess
+
+        # Harvest log
+        try:
+            with open("/var/log/medgen-stacks/harvest.log") as f:
+                lines = f.readlines()
+                stats["recent_log"] = [l.strip() for l in lines[-20:] if l.strip()]
+        except FileNotFoundError:
+            pass
+
+        # Resolver log
+        try:
+            with open("/var/log/medgen-stacks/resolve.log") as f:
+                lines = f.readlines()
+                stats["resolver"]["log"] = [l.strip() for l in lines[-10:] if l.strip()]
+        except FileNotFoundError:
+            stats["resolver"]["log"] = []
+
+        # Check if resolver process is running
+        try:
+            result = subprocess.run(
+                ["pgrep", "-f", "python3.*resolve_citations"],
+                capture_output=True, timeout=2
             )
-        )
-        if result.returncode == 0:
-            stats["recent_log"] = [l.strip() for l in result.stdout.strip().split("\n") if l.strip()]
-    except Exception:
-        pass
+            stats["resolver"]["running"] = result.returncode == 0
+        except Exception:
+            stats["resolver"]["running"] = False
+
+    await asyncio.to_thread(_read_logs)
 
     return stats
