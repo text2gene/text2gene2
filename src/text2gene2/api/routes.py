@@ -206,17 +206,9 @@ async def harvest_status():
         "error_summary": {},
     }
 
-    # Check if harvest process is running
-    try:
-        result = await asyncio.to_thread(
-            lambda: __import__("subprocess").run(
-                ["ssh", "loki.local", "pgrep", "-f", "harvest.py"],
-                capture_output=True, timeout=5
-            )
-        )
-        stats["running"] = result.returncode == 0
-    except Exception:
-        pass
+    # Determine if harvest is running by checking if harvest_log has been
+    # updated in the last 2 minutes (no SSH needed — just query the DB)
+    pass  # stats["running"] is set below after DB query
 
     # Query harvest_log from Postgres
     def _query_stats():
@@ -250,6 +242,15 @@ async def harvest_status():
                 stats["totals"]["genes"] = cur.fetchone()[0]
                 cur.execute("SELECT COUNT(*) FROM lovd.harvest_log WHERE error IS NOT NULL")
                 stats["totals"]["errors"] = cur.fetchone()[0]
+
+                # Is harvest actively running? Check if any log entry in last 2 min
+                cur.execute("""
+                    SELECT EXISTS(
+                        SELECT 1 FROM lovd.harvest_log
+                        WHERE harvested_at > NOW() - INTERVAL '2 minutes'
+                    )
+                """)
+                stats["running"] = cur.fetchone()[0]
 
                 # Total eligible (non-blocked LOVD 3.X with variants)
                 cur.execute("""

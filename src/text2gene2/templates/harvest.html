@@ -59,6 +59,10 @@ function render(d) {
     badge.textContent = "Harvest running";
     badge.style.background = "#d1fae5";
     badge.style.color = "#065f46";
+  } else if (isComplete) {
+    badge.textContent = "Harvest complete";
+    badge.style.background = "#dbeafe";
+    badge.style.color = "#1e40af";
   } else {
     badge.textContent = "Harvest idle";
     badge.style.background = "#f3f4f6";
@@ -72,18 +76,26 @@ function render(d) {
   const attempted = t.attempted || 0;
   const ok = t.genes || 0;
   const errs = t.errors || 0;
+  const remaining = eligible - attempted;
+  const isComplete = remaining <= 0 && eligible > 0 && !d.running;
   const pc = document.getElementById("progress-container");
   if (eligible > 0) {
     pc.style.display = "block";
     const pctOk = (ok / eligible * 100).toFixed(1);
     const pctErr = (errs / eligible * 100).toFixed(1);
     const pctTotal = ((ok + errs) / eligible * 100).toFixed(0);
-    const remaining = eligible - attempted;
     document.getElementById("progress-bar-ok").style.width = pctOk + "%";
     document.getElementById("progress-bar-err").style.width = pctErr + "%";
-    document.getElementById("progress-label").textContent =
-      `${ok} harvested, ${errs} failed, ${remaining > 0 ? remaining + " remaining" : "complete"} (of ${eligible} gene/host pairs)`;
-    document.getElementById("progress-pct").textContent = pctTotal + "%";
+    let label;
+    if (isComplete) {
+      label = `Complete — ${ok} harvested, ${errs} failed (of ${eligible} gene/host pairs)`;
+    } else if (remaining > 0) {
+      label = `${ok} harvested, ${errs} failed, ${remaining} remaining (of ${eligible})`;
+    } else {
+      label = `${ok} harvested, ${errs} failed (of ${eligible} gene/host pairs)`;
+    }
+    document.getElementById("progress-label").textContent = label;
+    document.getElementById("progress-pct").textContent = isComplete ? "Done" : pctTotal + "%";
   }
 
   // Totals
