@@ -314,9 +314,30 @@ All stacks are loaded manually via `medgen-stacks`. Recommended refresh cadence:
 | LOVD | Monthly | Scrape `grenada.lumc.nl` for new instances |
 | PMC | As needed | Full-text for validation only |
 
-To refresh a stack:
+## Automation
+
+Refresh is automated via cron on loki.local:
+
+```
+# Weekly: ClinVar, PubTator, LOVD (Sundays 3am)
+0 3 * * 0  /opt/medgen-stacks/bin/refresh.sh weekly
+
+# Monthly: + PubMed OA, Gene, MedGen (1st of month 2am)
+0 2 1 * *  /opt/medgen-stacks/bin/refresh.sh monthly
+
+# Quarterly: + HGNC, HPO, Orphanet (Jan/Apr/Jul/Oct 1st, 1am)
+0 1 1 1,4,7,10 *  /opt/medgen-stacks/bin/refresh.sh quarterly
+```
+
+The refresh script lives at `/opt/medgen-stacks/bin/refresh.sh` and supports:
+- `refresh.sh weekly` — ClinVar + PubTator + LOVD scrape
+- `refresh.sh monthly` — weekly stacks + PubMed OA + Gene + MedGen
+- `refresh.sh quarterly` — monthly stacks + HGNC + HPO + Orphanet
+- `refresh.sh <stack>` — single stack by name (e.g., `refresh.sh clinvar`)
+
+Logs: `/var/log/medgen-stacks/refresh.log` and `/var/log/medgen-stacks/cron.log`
+
+To refresh manually:
 ```bash
-cd ~/projects/git/medgen-stacks
-source .env
-make <stack_name>   # e.g., make clinvar, make pubtator
+ssh loki.local /opt/medgen-stacks/bin/refresh.sh weekly
 ```
