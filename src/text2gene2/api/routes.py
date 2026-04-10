@@ -251,6 +251,16 @@ async def harvest_status():
                 cur.execute("SELECT COUNT(*) FROM lovd.harvest_log WHERE error IS NOT NULL")
                 stats["totals"]["errors"] = cur.fetchone()[0]
 
+                # Total eligible (non-blocked LOVD 3.X with variants)
+                cur.execute("""
+                    SELECT COUNT(*) FROM lovd.lsdb
+                    WHERE db_type = 'LOVD 3.X' AND n_variants > 0
+                      AND url NOT LIKE '%%databases.lovd.nl%%'
+                """)
+                stats["totals"]["eligible"] = cur.fetchone()[0]
+                cur.execute("SELECT COUNT(*) FROM lovd.harvest_log")
+                stats["totals"]["attempted"] = cur.fetchone()[0]
+
                 # Error breakdown
                 cur.execute("""
                     SELECT

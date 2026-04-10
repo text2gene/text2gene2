@@ -10,6 +10,18 @@
   <span id="last-refresh" style="font-size:0.8rem; color:#6c757d; margin-left:0.5rem;"></span>
 </div>
 
+{# ── Progress bar ─────────────────────────────────────────────────── #}
+<div id="progress-container" style="display:none; margin-bottom:1rem;">
+  <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:#6c757d; margin-bottom:0.3rem;">
+    <span id="progress-label"></span>
+    <span id="progress-pct"></span>
+  </div>
+  <div style="height:12px; background:#e9ecef; border-radius:6px; overflow:hidden;">
+    <div id="progress-bar-ok" style="height:100%; float:left; background:#1a3a5c; transition:width 0.5s;"></div>
+    <div id="progress-bar-err" style="height:100%; float:left; background:#fca5a5; transition:width 0.5s;"></div>
+  </div>
+</div>
+
 {# ── Totals ──────────────────────────────────────────────────────── #}
 <div id="totals" style="display:flex; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap;"></div>
 
@@ -54,8 +66,27 @@ function render(d) {
   }
   document.getElementById("last-refresh").textContent = "Updated " + new Date().toLocaleTimeString();
 
-  // Totals
+  // Progress bar
   const t = d.totals;
+  const eligible = t.eligible || 0;
+  const attempted = t.attempted || 0;
+  const ok = t.genes || 0;
+  const errs = t.errors || 0;
+  const pc = document.getElementById("progress-container");
+  if (eligible > 0) {
+    pc.style.display = "block";
+    const pctOk = (ok / eligible * 100).toFixed(1);
+    const pctErr = (errs / eligible * 100).toFixed(1);
+    const pctTotal = ((ok + errs) / eligible * 100).toFixed(0);
+    const remaining = eligible - attempted;
+    document.getElementById("progress-bar-ok").style.width = pctOk + "%";
+    document.getElementById("progress-bar-err").style.width = pctErr + "%";
+    document.getElementById("progress-label").textContent =
+      `${ok} harvested, ${errs} failed, ${remaining > 0 ? remaining + " remaining" : "complete"} (of ${eligible} gene/host pairs)`;
+    document.getElementById("progress-pct").textContent = pctTotal + "%";
+  }
+
+  // Totals
   document.getElementById("totals").innerHTML = [
     card("Genes", t.genes, "#1a3a5c"),
     card("Variants", t.variants, "#1a3a5c"),
